@@ -4,7 +4,7 @@ Plugin Name: Restrict Categories
 Description: Restrict the categories that users can view, add, and edit in the admin panel.
 Author: Matthew Muro
 Author URI: http://matthewmuro.com
-Version: 2.6
+Version: 2.6.1
 */
 
 /*
@@ -418,6 +418,9 @@ class RestrictCategories{
 	 */
 	public function posts() {
 		global $wp_query, $current_user;
+
+		// Placeholder category (only used to ensure saving while paging works)
+		$defaults = array( 'RestrictCategoriesDefault' );
 		
 		// Get the current user in the admin
 		$user = new WP_User( $current_user->ID );
@@ -438,8 +441,8 @@ class RestrictCategories{
 		$settings_user = get_option( 'RestrictCats_user_options' );
 				
 		// For users, strip out the placeholder category, which is only used to make sure the checkboxes work
-		if ( is_array( $settings_user ) )
-			$settings_user[ $user_login . '_user_cats' ] = array_values( array_diff( $settings_user[ $user_login . '_user_cats' ], array( 'RestrictCategoriesDefault' ) ) );
+		if ( is_array( $settings_user ) && array_key_exists( $user_login . '_user_cats', $settings_user ) )
+			$settings_user[ $user_login . '_user_cats' ] = array_values( array_diff( $settings_user[ $user_login . '_user_cats' ], $defaults ) );
 		
 		// Selected categories for User overwrites Roles selection 
 		if ( is_array( $settings_user ) && !empty( $settings_user[ $user_login . '_user_cats' ] ) ) {
@@ -462,7 +465,7 @@ class RestrictCategories{
 				// Make sure the settings from the DB isn't empty before building the category list
 				if ( is_array( $settings ) && !empty( $settings[ $key . '_cats' ] ) ) {
 					// Strip out the placeholder category, which is only used to make sure the checkboxes work
-					$settings[ $key . '_cats' ] = array_values( array_diff( $settings[ $key . '_cats' ], array( 'RestrictCategoriesDefault' ) ) );
+					$settings[ $key . '_cats' ] = array_values( array_diff( $settings[ $key . '_cats' ], $defaults ) );
 					
 					// Build the category list
 					foreach ( $settings[ $key . '_cats' ] as $category ) {

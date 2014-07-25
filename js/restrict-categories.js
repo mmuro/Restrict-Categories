@@ -12,4 +12,23 @@ jQuery(document).ready(function($) {
 			items.prop( 'checked', true );
 	});
 	
+    /**
+     * This piece of code automatically allow you to select/unselect all children categories checkbox by clicking a parent category checkbox.
+     * 
+     * Added by Lorenzo Sanzari (ulisse73 on GitHub)
+     */
+    $('.tabs-panel ul li input[type=checkbox]').each(function(index, item) {
+        $(this).click(
+                function() {
+
+                    if ($(this).prop("checked")) {
+                        $(this).parent().parent().find('ul.children li input[type=checkbox]').prop("checked", true);
+                    } else {
+                        $(this).parent().parent().find('ul.children li input[type=checkbox]').prop("checked", false);
+                    }
+                }
+        );
+    });
+	
+	
 });

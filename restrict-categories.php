@@ -31,12 +31,13 @@ class RestrictCategories{
 	private $cat_list = NULL;
 	
 	public function __construct(){
+		global $pagenow;
+		
 		// Make sure we are in the admin before proceeding.
 		if ( is_admin() ) {
-			$post_type = ( isset( $_GET['post_type'] ) ) ? $_GET['post_type'] : false;
-
+			
   			// If the page is the Posts screen, do our thing, otherwise chill
-			if ( $post_type == false || $post_type == 'post' )
+			if ( in_array( $pagenow, array( 'edit.php', 'post-new.php', 'post.php' ) ) )
 				add_action( 'admin_init', array( &$this, 'posts' ) );
 			
 			// Build options and settings pages.

@@ -65,8 +65,8 @@ class RestrictCategories{
 	 * @uses register_setting() Register a setting in the database
 	 */
 	public function init() {
-		register_setting( 'RestrictCats_options_group', 'RestrictCats_options', array( &$this, 'options_sanitize' ) );
-		register_setting( 'RestrictCats_user_options_group', 'RestrictCats_user_options', array( &$this, 'options_sanitize' ) );
+		register_setting( 'RestrictCats_options_group', 'RestrictCats_options', array( 'sanitize_callback' => &$this->options_sanitize ) );
+		register_setting( 'RestrictCats_user_options_group', 'RestrictCats_user_options', array( 'sanitize_callback' => &$this->options_sanitize ) );
 				
 		// Set the options to a variable
 		add_option( 'RestrictCats_options' );
